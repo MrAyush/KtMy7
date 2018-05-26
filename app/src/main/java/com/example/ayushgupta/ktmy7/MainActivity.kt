@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,7 +55,36 @@ class MainActivity : AppCompatActivity() {
                     list!!.add(c.getString(0) + "|" + c.getString(1) + "|" + c.getString(2)+ "|" + c.getString(3) )
                 }
                 val adapter:ArrayAdapter<String> = ArrayAdapter(this,android.R.layout.simple_list_item_1,list)
+                val lview:ListView = findViewById(R.id.lview)
                 lview.adapter = adapter
+            }
+            R.id.update->{
+                val c = ContentValues()
+                c.put("name",et2?.text.toString())
+                c.put("desig",et3?.text.toString())
+                c.put("salary",et4?.text.toString().toLong())
+                val status = dBase!!.update("employee",c,"id=?", arrayOf(et1?.text.toString()))
+                if (status == 0){
+                    Toast.makeText(this,"Error has occurred can't update",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this,"Record has been updated",Toast.LENGTH_SHORT).show()
+                }
+                et1?.setText("")
+                et2?.setText("")
+                et3?.setText("")
+                et4?.setText("")
+            }
+            R.id.del->{
+                val status = dBase!!.delete("employee","id=?", arrayOf(et1?.text.toString()))
+                if (status == 0){
+                    Toast.makeText(this,"Error has occurred can't delete",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this,"Record has been deleted",Toast.LENGTH_SHORT).show()
+                }
+                et1?.setText("")
+                et2?.setText("")
+                et3?.setText("")
+                et4?.setText("")
             }
         }
     }
